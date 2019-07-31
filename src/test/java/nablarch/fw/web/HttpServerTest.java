@@ -1,16 +1,11 @@
 package nablarch.fw.web;
 
-import nablarch.common.web.download.StreamResponse;
-import nablarch.common.web.handler.HttpAccessLogHandler;
-import nablarch.core.ThreadContext;
-import nablarch.core.util.Builder;
-import nablarch.fw.ExecutionContext;
-import nablarch.fw.web.handler.ResourceMapping;
-import nablarch.fw.web.httpserver.HttpServerJetty9;
-import nablarch.test.core.log.LogVerifier;
-import nablarch.test.support.tool.Hereis;
-import org.junit.Before;
-import org.junit.Test;
+import static nablarch.test.StringMatcher.startsWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.*;
+import static org.junit.Assume.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,16 +18,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static nablarch.test.StringMatcher.startsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeThat;
+import org.junit.Before;
+import org.junit.Test;
+
+import nablarch.common.web.download.StreamResponse;
+import nablarch.common.web.handler.HttpAccessLogHandler;
+import nablarch.core.ThreadContext;
+import nablarch.core.util.Builder;
+import nablarch.fw.ExecutionContext;
+import nablarch.fw.web.handler.ResourceMapping;
+import nablarch.fw.web.httpserver.HttpServerJetty9;
+import nablarch.test.core.log.LogVerifier;
+import nablarch.test.support.tool.Hereis;
 
 public class HttpServerTest {
 
@@ -444,7 +441,8 @@ public class HttpServerTest {
             fail();
         } catch (RuntimeException e) {
             assertNotNull(e.getCause());
-            assertEquals(BindException.class, e.getCause().getClass());
+            assertEquals(IOException.class, e.getCause().getClass());
+            assertEquals(BindException.class, e.getCause().getCause().getClass());
         }
     }
 
@@ -642,7 +640,7 @@ public class HttpServerTest {
 
         
         assertEquals(200, res.getStatusCode());
-        assertEquals("text/plain; charset=UTF-8", res.getContentType());
+        assertEquals("text/plain;charset=utf-8", res.getContentType());
         assertEquals("/app/test.html", req.getRequestPath());
         
         File[] dumpFiles = dumpRoot.listFiles();

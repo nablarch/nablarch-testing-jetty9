@@ -7,17 +7,17 @@ import nablarch.fw.web.HttpResponse;
 
 public class SessionOverwriteCheckAction implements Handler<HttpRequest, HttpResponse> {
     public HttpResponse handle(HttpRequest req, ExecutionContext ctx) {
-        String val = String.valueOf(ctx.getSessionScopedVar("otherSessionParam"));
+        String val = ctx.getSessionScopedVar("otherSessionParam");
         if (val == null || !val.equals("hoge")) {
             throw new RuntimeException(val);   
         }
         
-        val = String.valueOf(ctx.getSessionScopedVar("commonHeaderLoginUserName"));
+        val = ctx.getSessionScopedVar("commonHeaderLoginUserName");
         if (val == null || !val.equals("リクエスト単体テストユーザ2")) {
             throw new RuntimeException(val);   
         }
         
-        val = String.valueOf(ctx.getSessionScopedVar("commonHeaderLoginDate"));
+        val = ctx.getSessionScopedVar("commonHeaderLoginDate");
         if (val == null || !val.equals("20120914")) {
             throw new RuntimeException(val);   
         }

@@ -1666,9 +1666,9 @@ public class HttpRequestTestSupportTest {
                 ctx);
 
         // 業務Actionによって値が上書きされたことを確認する
-        assertEquals("requestScope_value_change", String.valueOf(ctx.getRequestScopedVar("requestScope")));
-        assertEquals("sessionScope_value_change", String.valueOf(ctx.getSessionScopedVar("sessionScope")));
-        assertEquals("sessionStore_value_change", String.valueOf(SessionUtil.get(ctx,"sessionStore")));
+        assertEquals("requestScope_value_change", ctx.getRequestScopedVar("requestScope"));
+        assertEquals("sessionScope_value_change", ctx.getSessionScopedVar("sessionScope"));
+        assertEquals("sessionStore_value_change", SessionUtil.get(ctx,"sessionStore"));
     }
 
     /**
@@ -1768,9 +1768,9 @@ public class HttpRequestTestSupportTest {
                 ctx);
 
         // 業務Actionによって値が上書きされたことを確認する
-        assertEquals("requestScope_value_change", String.valueOf(ctx.getRequestScopedVar("requestScope")));
-        assertEquals("sessionScope_value_change", String.valueOf(ctx.getSessionScopedVar("sessionScope")));
-        assertEquals("sessionStore_value_change", String.valueOf(SessionUtil.get(ctx,"sessionStore")));
+        assertEquals("requestScope_value_change", ctx.getRequestScopedVar("requestScope"));
+        assertEquals("sessionScope_value_change", ctx.getSessionScopedVar("sessionScope"));
+        assertEquals("sessionStore_value_change", SessionUtil.get(ctx,"sessionStore"));
 
     }
 
@@ -1800,9 +1800,9 @@ public class HttpRequestTestSupportTest {
                 ctx);
 
         // 業務Actionによって値が上書きされたことを確認する
-        assertEquals("requestScope_value_change", String.valueOf(ctx.getRequestScopedVar("requestScope")));
-        assertEquals("sessionScope_value_change", String.valueOf(ctx.getSessionScopedVar("sessionScope")));
-        assertEquals("sessionStore_value_change", String.valueOf(SessionUtil.get(ctx,"sessionStore")));
+        assertEquals("requestScope_value_change", ctx.getRequestScopedVar("requestScope"));
+        assertEquals("sessionScope_value_change", ctx.getSessionScopedVar("sessionScope"));
+        assertEquals("sessionStore_value_change", SessionUtil.get(ctx,"sessionStore"));
 
     }
 

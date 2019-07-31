@@ -22,9 +22,10 @@
   </parent>
   
   <properties>
-    <ecj.version>3.5.1</ecj.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <ecj.version>3.5.1</ecj.version>
+    <jetty.version>9.4.19.v20190610</jetty.version>
   </properties>
   
   <dependencies>
@@ -32,36 +33,22 @@
       <groupId>com.nablarch.framework</groupId>
       <artifactId>nablarch-testing</artifactId>
       <version>1.3.0-SNAPSHOT</version>
-    </dependency>
-    
-    <!-- 
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jsp-2.1-glassfish</artifactId>
-      <version>2.1.v20100127</version>
-      <scope>runtime</scope>
       <exclusions>
+        <exclusion>
+          <groupId>org.mortbay.jetty</groupId>
+          <artifactId>jsp-2.1-glassfish</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>org.eclipse.jdt.core.compiler</groupId>
           <artifactId>ecj</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.mortbay.jetty</groupId>
+          <artifactId>jsp-api-2.1-glassfish</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.jdt.core.compiler</groupId>
-      <artifactId>ecj</artifactId>
-      <version>${ecj.version}</version>
-    </dependency>
-     -->
-
-    <!--<dependency>-->
-      <!--<groupId>org.mortbay.jetty</groupId>-->
-      <!--<artifactId>jsp-api-2.1-glassfish</artifactId>-->
-      <!--<version>2.1.v20100127</version>-->
-      <!--<scope>runtime</scope>-->
-    <!--</dependency>-->
-
+    
     <dependency>
       <groupId>com.nablarch.dev</groupId>
       <artifactId>nablarch-test-support</artifactId>
@@ -70,6 +57,10 @@
         <exclusion>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mortbay.jetty</groupId>
+          <artifactId>jsp-api-2.1-glassfish</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -100,11 +91,39 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlet</artifactId>
-      <version>9.4.19.v20190610</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>apache-jsp</artifactId>
     </dependency>
 
-
+    <dependency>
+      <groupId>com.sun.activation</groupId>
+      <artifactId>javax.activation</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.3.1</version>
+    </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-bom</artifactId>
+        <version>${jetty.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <build>
     <testResources>
       <testResource>

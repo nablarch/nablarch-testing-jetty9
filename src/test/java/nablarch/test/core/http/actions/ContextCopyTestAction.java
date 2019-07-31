@@ -24,17 +24,17 @@ public class ContextCopyTestAction {
                                                                   ExecutionContext context) {
 
         //テスト側→コンテナ側に値がコピーされていることを確認する
-        String val = String.valueOf(context.getSessionScopedVar("sessionScope"));
+        String val = context.getSessionScopedVar("sessionScope");
         if (val == null || !val.equals("sessionScope_value")) {
             throw new RuntimeException(val);
         }
 
-        val = String.valueOf(context.getRequestScopedVar("requestScope"));
+        val = context.getRequestScopedVar("requestScope");
         if (val == null || !val.equals("requestScope_value")) {
             throw new RuntimeException(val);
         }
 
-        val = String.valueOf(SessionUtil.get(context,"sessionStore"));
+        val = SessionUtil.get(context,"sessionStore");
         if (val == null || !val.equals("sessionStore_value")) {
             throw new RuntimeException(val);
         }
@@ -63,17 +63,17 @@ public class ContextCopyTestAction {
                                              ExecutionContext context) {
 
         //テスト側→コンテナ側に値がコピーされていることを確認する
-        String val = String.valueOf(context.getSessionScopedVar("sessionScope_removeTarget"));
+        String val = context.getSessionScopedVar("sessionScope_removeTarget");
         if (val == null || !val.equals("sessionScope_value_remove")) {
             throw new RuntimeException(val);
         }
 
-        val = String.valueOf(context.getRequestScopedVar("requestScope_removeTarget"));
+        val = context.getRequestScopedVar("requestScope_removeTarget");
         if (val == null || !val.equals("requestScope_value_remove")) {
             throw new RuntimeException(val);
         }
 
-        val = String.valueOf(SessionUtil.get(context,"sessionStore_removeTarget"));
+        val = SessionUtil.get(context,"sessionStore_removeTarget");
         if (val == null || !val.equals("sessionStore_value_remove")) {
             throw new RuntimeException(val);
         }
@@ -98,12 +98,12 @@ public class ContextCopyTestAction {
 
         // テスト側から引き渡されたcontextに値が格納されていることを確認する
         // この時点で値格納に失敗している場合は実行時エラーを送出
-        String val = String.valueOf(context.getSessionScopedVar("sessionScope"));
+        String val = context.getSessionScopedVar("sessionScope");
         if (val == null || !val.equals("sessionScope_value")) {
             throw new RuntimeException(val);
         }
 
-        val = String.valueOf(SessionUtil.get(context,"sessionStore"));
+        val = SessionUtil.get(context,"sessionStore");
         if (val == null || !val.equals("sessionStore_value")) {
             throw new RuntimeException(val);
         }

@@ -65,5 +65,5 @@
   <component name="statementFactory"
              class="nablarch.core.db.statement.BasicStatementFactory"/>
 
-  <component name="httpServerFactory" class="nablarch.fw.web.httpserver.HttpServerFactoryJetty6"/>
+  <component name="httpServerFactory" class="nablarch.fw.web.httpserver.HttpServerFactoryJetty9"/>
 </component-configuration>
