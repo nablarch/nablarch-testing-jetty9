@@ -178,6 +178,8 @@ public class HttpServerJetty9 extends HttpServer {
         webApp.setContextPath(getServletContextPath());
         webApp.setBaseResource(toResourceCollection(getWarBasePaths()));
         webApp.setClassLoader(Thread.currentThread().getContextClassLoader());
+        webApp.addFilter(LazySessionInvalidationFilter.class, "/*",
+                EnumSet.allOf(DispatcherType.class));
         Filter webFrontController = getWebFrontController();
         webApp.addFilter(
                 new FilterHolder(webFrontController)
