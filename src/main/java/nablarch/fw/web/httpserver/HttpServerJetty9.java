@@ -7,11 +7,8 @@ import java.util.List;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
-import javax.servlet.jsp.JspFactory;
 
-import org.apache.jasper.runtime.JspFactoryImpl;
-import org.apache.tomcat.InstanceManager;
-import org.apache.tomcat.SimpleInstanceManager;
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.LocalConnector;
 import org.eclipse.jetty.server.Server;
@@ -19,6 +16,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.resource.ResourceCollection;
+import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import nablarch.core.util.annotation.Published;
@@ -169,9 +167,6 @@ public class HttpServerJetty9 extends HttpServer {
      */
     private void deploy() {
         WebAppContext webApp = new WebAppContext();
-        final JspFactoryImpl factory = new JspFactoryImpl();
-        JspFactory.setDefaultFactory(factory);
-        webApp.setAttribute(InstanceManager.class.getName(), new SimpleInstanceManager());
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.setSessionIdPathParameterName("none");
         webApp.setSessionHandler(sessionHandler);
@@ -186,7 +181,10 @@ public class HttpServerJetty9 extends HttpServer {
                 , "/*"
                 , EnumSet.of(DispatcherType.REQUEST)
         );
-
+        Configuration[] configurations = {
+            new AnnotationConfiguration()
+        };
+        webApp.setConfigurations(configurations);
         File tmpDir = getTempDirectory();
         if (tmpDir != null) {
             webApp.setTempDirectory(tmpDir);
