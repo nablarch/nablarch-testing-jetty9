@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 
+import org.apache.tomcat.JarScanner;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.LocalConnector;
@@ -176,6 +178,9 @@ public class HttpServerJetty9 extends HttpServer {
         webApp.addFilter(LazySessionInvalidationFilter.class, "/*",
                 EnumSet.allOf(DispatcherType.class));
         Filter webFrontController = getWebFrontController();
+        StandardJarScanner scanner = new StandardJarScanner();
+        scanner.setScanManifest(false);
+        webApp.setAttribute(JarScanner.class.getName(), scanner);
         webApp.addFilter(
                 new FilterHolder(webFrontController)
                 , "/*"
