@@ -8,8 +8,6 @@ import java.util.List;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 
-import org.apache.tomcat.JarScanner;
-import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.LocalConnector;
@@ -18,7 +16,6 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.resource.ResourceCollection;
-import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import nablarch.core.util.annotation.Published;
@@ -28,6 +25,8 @@ import nablarch.fw.web.HttpResponse;
 import nablarch.fw.web.HttpServer;
 import nablarch.fw.web.MockHttpRequest;
 import nablarch.fw.web.ResourceLocator;
+import org.eclipse.jetty.webapp.WebInfConfiguration;
+import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 /**
  * エンベディドHTTPサーバー&サーブレットコンテナ。
@@ -176,20 +175,22 @@ public class HttpServerJetty9 extends HttpServer {
         webApp.setBaseResource(toResourceCollection(getWarBasePaths()));
         webApp.setClassLoader(Thread.currentThread().getContextClassLoader());
         webApp.addFilter(LazySessionInvalidationFilter.class, "/*",
-                EnumSet.allOf(DispatcherType.class));
+            EnumSet.allOf(DispatcherType.class));
+
         Filter webFrontController = getWebFrontController();
-        StandardJarScanner scanner = new StandardJarScanner();
-        scanner.setScanManifest(false);
-        webApp.setAttribute(JarScanner.class.getName(), scanner);
         webApp.addFilter(
                 new FilterHolder(webFrontController)
                 , "/*"
                 , EnumSet.of(DispatcherType.REQUEST)
         );
-        Configuration[] configurations = {
-            new AnnotationConfiguration()
-        };
-        webApp.setConfigurations(configurations);
+        String[] CONFIGURATION_CLASSES = {
+            WebInfConfiguration.class.getName(),
+            WebXmlConfiguration.class.getName(),
+            AnnotationConfiguration.class.getName()
+        } ;
+        webApp.setConfigurationClasses(CONFIGURATION_CLASSES);
+
+
         File tmpDir = getTempDirectory();
         if (tmpDir != null) {
             webApp.setTempDirectory(tmpDir);
