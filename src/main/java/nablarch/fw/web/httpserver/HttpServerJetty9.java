@@ -32,15 +32,10 @@ import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 /**
- * エンベディドHTTPサーバー&サーブレットコンテナ。
- * <pre>
- * 主に単体テスト時の画面確認や打鍵テストで使用することを想定した、
- * JVMプロセス内の1スレッドとして動作する軽量アプリケーションサーバである。
- * 現行の実装では、内部的にJettyサーバを使用しており、
- * 本クラスは単なるラッパーに過ぎない。
- * </pre>
+ * Jetty9対応の{@link HttpServer}サブクラス。
  *
- * @author Iwauo Tajima <iwauo@tis.co.jp>
+ * @author Taichi Uragami
+ * @author Yutaka Kanayama
  */
 @Published(tag = "architect")
 public class HttpServerJetty9 extends HttpServer {
