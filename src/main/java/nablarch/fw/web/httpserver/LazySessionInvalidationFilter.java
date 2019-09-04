@@ -76,14 +76,14 @@ public class LazySessionInvalidationFilter implements Filter {
          * コンストラクタ。
          * @param request ラップ対象の{@link HttpServletRequest}
          */
-        public RequestWrapper(HttpServletRequest request) {
+        RequestWrapper(HttpServletRequest request) {
             this.request = request;
         }
 
         /**
          * 実際に{@link HttpSession#invalidate()}を実行する。
          */
-        public void invalidateSessionActually() {
+        void invalidateSessionActually() {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();
@@ -121,7 +121,7 @@ public class LazySessionInvalidationFilter implements Filter {
          * invalidateが要求されたか否かを判定する。
          * @return invalidateが要求された場合、真
          */
-        public boolean isInvalidated() {
+        boolean isInvalidated() {
             return invalidated;
         }
 
@@ -130,7 +130,7 @@ public class LazySessionInvalidationFilter implements Filter {
          * @param request ラップ対象の{@link HttpServletRequest}
          * @return ラップした{@link HttpServletRequest}
          */
-        public static HttpServletRequest wrap(HttpServletRequest request) {
+        static HttpServletRequest wrap(HttpServletRequest request) {
             ClassLoader loader = request.getClass().getClassLoader();
             Class<?>[] interfaces = { HttpServletRequest.class };
             InvocationHandler h = new RequestWrapper(request);
@@ -188,7 +188,7 @@ public class LazySessionInvalidationFilter implements Filter {
          * @param invalidationCallback invalidate起動時のコールバック
          * @return ラップした{@link HttpSession}
          */
-        public static HttpSession wrap(HttpSession session, Runnable invalidationCallback) {
+        static HttpSession wrap(HttpSession session, Runnable invalidationCallback) {
             ClassLoader loader = session.getClass().getClassLoader();
             Class<?>[] interfaces = { HttpSession.class };
             InvocationHandler h = new SessionWrapper(session, invalidationCallback);
