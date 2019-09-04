@@ -144,10 +144,10 @@ public class LazySessionInvalidationFilter implements Filter {
     private static class SessionWrapper implements InvocationHandler {
 
         /** {@link HttpSession}の実体 */
-        private HttpSession session;
+        private final HttpSession session;
 
         /** invalidate起動時のコールバック */
-        private Runnable invalidationCallback;
+        private final Runnable invalidationCallback;
 
         /**
          * コンストラクタ。
