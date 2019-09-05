@@ -7,11 +7,10 @@ import java.util.List;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
-import javax.servlet.jsp.JspFactory;
 
-import org.apache.jasper.runtime.JspFactoryImpl;
-import org.apache.tomcat.InstanceManager;
-import org.apache.tomcat.SimpleInstanceManager;
+import org.apache.tomcat.JarScanner;
+import org.apache.tomcat.util.scan.StandardJarScanner;
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.LocalConnector;
 import org.eclipse.jetty.server.Server;
@@ -19,6 +18,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.util.resource.ResourceCollection;
+import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import nablarch.core.util.annotation.Published;
@@ -28,17 +28,14 @@ import nablarch.fw.web.HttpResponse;
 import nablarch.fw.web.HttpServer;
 import nablarch.fw.web.MockHttpRequest;
 import nablarch.fw.web.ResourceLocator;
+import org.eclipse.jetty.webapp.WebInfConfiguration;
+import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 /**
- * エンベディドHTTPサーバー&サーブレットコンテナ。
- * <pre>
- * 主に単体テスト時の画面確認や打鍵テストで使用することを想定した、
- * JVMプロセス内の1スレッドとして動作する軽量アプリケーションサーバである。
- * 現行の実装では、内部的にJettyサーバを使用しており、
- * 本クラスは単なるラッパーに過ぎない。
- * </pre>
+ * Jetty9対応の{@link HttpServer}サブクラス。
  *
- * @author Iwauo Tajima <iwauo@tis.co.jp>
+ * @author Taichi Uragami
+ * @author Yutaka Kanayama
  */
 @Published(tag = "architect")
 public class HttpServerJetty9 extends HttpServer {
@@ -169,23 +166,31 @@ public class HttpServerJetty9 extends HttpServer {
      */
     private void deploy() {
         WebAppContext webApp = new WebAppContext();
-        final JspFactoryImpl factory = new JspFactoryImpl();
-        JspFactory.setDefaultFactory(factory);
-        webApp.setAttribute(InstanceManager.class.getName(), new SimpleInstanceManager());
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.setSessionIdPathParameterName("none");
         webApp.setSessionHandler(sessionHandler);
         webApp.setContextPath(getServletContextPath());
         webApp.setBaseResource(toResourceCollection(getWarBasePaths()));
         webApp.setClassLoader(Thread.currentThread().getContextClassLoader());
+        StandardJarScanner scanner = new StandardJarScanner();
+        scanner.setScanManifest(false);
+        webApp.setAttribute(JarScanner.class.getName(), scanner);
+        webApp.setPersistTempDirectory(true);
+
         webApp.addFilter(LazySessionInvalidationFilter.class, "/*",
-                EnumSet.allOf(DispatcherType.class));
+                EnumSet.of(DispatcherType.REQUEST));
         Filter webFrontController = getWebFrontController();
         webApp.addFilter(
                 new FilterHolder(webFrontController)
                 , "/*"
                 , EnumSet.of(DispatcherType.REQUEST)
         );
+        Configuration[] configurations = {
+                new WebInfConfiguration(),
+                new WebXmlConfiguration(),
+                new AnnotationConfiguration()
+        };
+        webApp.setConfigurations(configurations);
 
         File tmpDir = getTempDirectory();
         if (tmpDir != null) {
