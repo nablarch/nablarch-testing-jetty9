@@ -4,10 +4,13 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 
+import nablarch.test.core.http.HttpRequestTestSupportHandler;
 import org.apache.tomcat.JarScanner;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
@@ -117,7 +120,7 @@ public class HttpServerJetty9 extends HttpServer {
      * そのレスポンスボディの内容を所定のディレクトリに出力する。
      * </pre>
      */
-    public HttpResponse handle(HttpRequest req, ExecutionContext unused) {
+    public HttpResponse handle(HttpRequest req, ExecutionContext sourceContext) {
         if (localConnector == null) {
             throw new RuntimeException(
                     "this server is not running on a local connector. "
@@ -130,11 +133,13 @@ public class HttpServerJetty9 extends HttpServer {
             ((MockHttpRequest) req).setHost("127.0.0.1");
         }
 
+        final CountDownLatch latch = new CountDownLatch(1);
+        sourceContext.setRequestScopedVar(HttpRequestTestSupportHandler.NABLARCH_JETTY_CONNECTOR_LATCH, latch);
         try {
             byte[] rawReq = req.toString().getBytes();
-            byte[] rawRes = localConnector.getResponse(
-                    ByteBuffer.wrap(rawReq)
-            ).array();
+            ByteBuffer response = localConnector.getResponse(ByteBuffer.wrap(rawReq));
+            latch.await(10L, TimeUnit.SECONDS);
+            byte[] rawRes = response.array();
             HttpResponse res = HttpResponse.parse(rawRes);
             if (isHttpDumpEnabled()) {
                 dumpHttpMessage(req, res);
