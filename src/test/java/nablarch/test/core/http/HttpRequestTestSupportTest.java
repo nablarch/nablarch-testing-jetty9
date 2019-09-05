@@ -1656,19 +1656,25 @@ public class HttpRequestTestSupportTest {
         ExecutionContext ctx = new ExecutionContext();
 
         // 上書き対象のStringを格納
+        System.out.println("--------testSessionCopyAndChange set value start--------");
         ctx.setRequestScopedVar("requestScope", "requestScope_value");
         ctx.setSessionScopedVar("sessionScope", "sessionScope_value");
         SessionUtil.put(ctx,"sessionStore", "sessionStore_value");
+        System.out.println("--------testSessionCopyAndChange  set value  end--------");
 
         // コピーに失敗している場合は実行時エラーが送出される
+        System.out.println("--------testSessionCopyAndChangee target execute start--------");
         target.execute("testSessionCopyAndChange",
                 new MockHttpRequest().setRequestUri("/action/ContextCopyTestAction/copyAndChangeValue"),
                 ctx);
+        System.out.println("--------testSessionCopyAndChange target execute end--------");
 
         // 業務Actionによって値が上書きされたことを確認する
+        System.out.println("--------testSessionCopyAndChange assert start--------");
         assertEquals("requestScope_value_change", ctx.getRequestScopedVar("requestScope"));
         assertEquals("sessionScope_value_change", ctx.getSessionScopedVar("sessionScope"));
         assertEquals("sessionStore_value_change", SessionUtil.get(ctx,"sessionStore"));
+        System.out.println("--------testSessionCopyAndChange assert end--------");
     }
 
     /**
@@ -1689,18 +1695,24 @@ public class HttpRequestTestSupportTest {
         ExecutionContext ctx = new ExecutionContext();
 
         // 削除対象のStringを格納
+        System.out.println("--------testSessionDelete set value start--------");
         ctx.setRequestScopedVar("requestScope_removeTarget", "requestScope_value_remove");
         ctx.setSessionScopedVar("sessionScope_removeTarget", "sessionScope_value_remove");
         SessionUtil.put(ctx,"sessionStore_removeTarget", "sessionStore_value_remove");
+        System.out.println("--------testSessionDelete  set value  end--------");
 
         // コピーに失敗している場合は実行時エラーが送出される
+        System.out.println("--------testSessionDelete target execute start--------");
         target.execute("sessionDelete",
                 new MockHttpRequest().setRequestUri("/action/ContextCopyTestAction/sessionDelete"),
                 ctx);
+        System.out.println("--------testSessionDelete target execute end--------");
 
+        System.out.println("--------testSessionDelete assert start--------");
         assertNull(ctx.getRequestScopedVar("requestScope_removeTarget"));
         assertNull(ctx.getSessionScopedVar("sessionScope_removeTarget"));
         assertNull(SessionUtil.orNull(ctx,"sessionStore_removeTarget"));
+        System.out.println("--------testSessionDelete assert end--------");
     }
 
     /**
