@@ -1758,19 +1758,25 @@ public class HttpRequestTestSupportTest {
         ExecutionContext ctx = new ExecutionContext();
 
         // 上書き対象のStringを格納
+        System.out.println("--------testAvailableDbStore  set value start---------");
         ctx.setRequestScopedVar("requestScope", "requestScope_value");
         ctx.setSessionScopedVar("sessionScope", "sessionScope_value");
         SessionUtil.put(ctx,"sessionStore", "sessionStore_value");
+        System.out.println("--------testAvailableDbStore set value end---------");
 
         // コピーに失敗している場合は実行時エラーが送出される
+        System.out.println("--------testAvailableDbStore target execute start---------");
         target.execute("testAvailableDbSore",
                 new MockHttpRequest().setRequestUri("/action/ContextCopyTestAction/copyAndChangeValue"),
                 ctx);
+        System.out.println("--------testAvailableDbStore target execute end---------");
 
         // 業務Actionによって値が上書きされたことを確認する
+        System.out.println("--------testAvailableDbStore assert start--------");
         assertEquals("requestScope_value_change", ctx.getRequestScopedVar("requestScope"));
         assertEquals("sessionScope_value_change", ctx.getSessionScopedVar("sessionScope"));
         assertEquals("sessionStore_value_change", SessionUtil.get(ctx,"sessionStore"));
+        System.out.println("--------testAvailableDbStore assert end--------");
 
     }
 
@@ -1790,19 +1796,25 @@ public class HttpRequestTestSupportTest {
         ExecutionContext ctx = new ExecutionContext();
 
         // 上書き対象のStringを格納
+        System.out.println("--------testAvailableHiddenStore set value start--------");
         ctx.setRequestScopedVar("requestScope", "requestScope_value");
         ctx.setSessionScopedVar("sessionScope", "sessionScope_value");
         SessionUtil.put(ctx,"sessionStore", "sessionStore_value");
+        System.out.println("--------testAvailableHiddenStore  set value  end--------");
 
         // コピーに失敗している場合は実行時エラーが送出される
+        System.out.println("--------testAvailableHiddenStore target execute start--------");
         target.execute("testAvailableHiddenStore",
                 new MockHttpRequest().setRequestUri("/action/ContextCopyTestAction/copyAndChangeValue"),
                 ctx);
+        System.out.println("--------testAvailableHiddenStore target execute end--------");
 
         // 業務Actionによって値が上書きされたことを確認する
+        System.out.println("--------testAvailableHiddenStore assert start--------");
         assertEquals("requestScope_value_change", ctx.getRequestScopedVar("requestScope"));
         assertEquals("sessionScope_value_change", ctx.getSessionScopedVar("sessionScope"));
         assertEquals("sessionStore_value_change", SessionUtil.get(ctx,"sessionStore"));
+        System.out.println("--------testAvailableHiddenStore assert end--------");
 
     }
 
