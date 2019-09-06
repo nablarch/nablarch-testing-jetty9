@@ -80,7 +80,7 @@ public class HttpServerTest {
         .startLocal();
         
         HttpResponse res = server.handle(new MockHttpRequest(
-                "GET /nabla_app/path/to/somewhere/Greeting HTTP/1.1"), null);
+                "GET /nabla_app/path/to/somewhere/Greeting HTTP/1.1"), new ExecutionContext());
 
         
         assertEquals(201, res.getStatusCode());
@@ -97,7 +97,7 @@ public class HttpServerTest {
         )));
 
         res = server.handle(new MockHttpRequest(
-                "GET /nabla_app/path/to/somewhere/ja/Greeting HTTP/1.1"), null);
+                "GET /nabla_app/path/to/somewhere/ja/Greeting HTTP/1.1"), new ExecutionContext());
 
         assertEquals(201, res.getStatusCode());
         assertEquals(201, InternalMonitor.response.getStatusCode());
@@ -129,7 +129,7 @@ public class HttpServerTest {
         })
         .startLocal();
         
-        HttpResponse res = server.handle(new MockHttpRequest(Hereis.string()), null);
+        HttpResponse res = server.handle(new MockHttpRequest(Hereis.string()), new ExecutionContext());
         /*************************************************************
         GET /nabla_app/path/that/shouldNotBeRead/page.html HTTP/1.1
         **************************************************************/
@@ -390,7 +390,7 @@ public class HttpServerTest {
         GET /app/hasLink.do?hoge=fuga HTTP/1.1
         *************************************/
         
-        HttpResponse res = server.handle(httpRequest , null);
+        HttpResponse res = server.handle(httpRequest , new ExecutionContext());
         
         assertEquals(200, res.getStatusCode());
         StringBuilder buffer = new StringBuilder();
@@ -709,7 +709,7 @@ public class HttpServerTest {
             GET /app/hasLink.do?hoge=fuga HTTP/1.1
             *************************************/
             
-            HttpResponse res = server.handle(httpRequest , null);
+            HttpResponse res = server.handle(httpRequest , new ExecutionContext());
             fail();
         } catch (RuntimeException e) {
             assertEquals(IOException.class, e.getCause().getClass());
@@ -737,27 +737,27 @@ public class HttpServerTest {
         server.startLocal();
 
         // firstのみにあるリソースが取得できること
-        HttpResponse first = server.handle(new MockHttpRequest("GET /first.html HTTP/1.1"), null);
+        HttpResponse first = server.handle(new MockHttpRequest("GET /first.html HTTP/1.1"), new ExecutionContext());
         assertThat(first.getBodyString(), is("this is first.html"));
         assertThat(first.getStatusCode(), is(200));
 
         // secondのみにあるリソースが取得できること
-        HttpResponse second = server.handle(new MockHttpRequest("GET /second.html HTTP/1.1"), null);
+        HttpResponse second = server.handle(new MockHttpRequest("GET /second.html HTTP/1.1"), new ExecutionContext());
         assertThat(second.getBodyString(), is("this is second.html"));
         assertThat(second.getStatusCode(), is(200));
 
         // thirdのみにあるリソースが取得できること
-        HttpResponse third = server.handle(new MockHttpRequest("GET /third.html HTTP/1.1"), null);
+        HttpResponse third = server.handle(new MockHttpRequest("GET /third.html HTTP/1.1"), new ExecutionContext());
         assertThat(third.getBodyString(), is("this is third.html"));
         assertThat(third.getStatusCode(), is(200));
 
         // firstとsecondとthirdで重複したリソースを要求した場合、firstのリソースが優先されること
-        HttpResponse duplicateHtml = server.handle(new MockHttpRequest("GET /duplicate.html HTTP/1.1"), null);
+        HttpResponse duplicateHtml = server.handle(new MockHttpRequest("GET /duplicate.html HTTP/1.1"), new ExecutionContext());
         assertThat(duplicateHtml.getBodyString(), is("this is resource of first module."));
         assertThat(duplicateHtml.getStatusCode(), is(200));
 
         // secondとthirdで重複したリソースを要求した場合、secondのリソースが優先されること
-        HttpResponse duplicateHtml2 = server.handle(new MockHttpRequest("GET /duplicate2.html HTTP/1.1"), null);
+        HttpResponse duplicateHtml2 = server.handle(new MockHttpRequest("GET /duplicate2.html HTTP/1.1"), new ExecutionContext());
         assertThat(duplicateHtml2.getBodyString(), is("this is resource of second module."));
         assertThat(duplicateHtml2.getStatusCode(), is(200));
 
