@@ -225,7 +225,7 @@ public class HttpServerTest {
     @Test
     public void testHandle() {
         HttpServer server = new HttpServerJetty9()
-        .addHandler("/test/", new HttpRequestHandler() {
+        .addHandler("/test//", new HttpRequestHandler() {
             public HttpResponse handle(HttpRequest req, ExecutionContext ctx) {
                 return new HttpResponse(200).write("hello world");
             }
@@ -242,7 +242,7 @@ public class HttpServerTest {
         assertEquals(200, res.getStatusCode());
         assertEquals("hello world", res.getBodyString().trim());
         
-        server.addHandler("/test2/", new Object() {
+        server.addHandler("/test2//", new Object() {
             public HttpResponse getIndex(HttpRequest req, ExecutionContext ctx) {
                 return new HttpResponse(200).write("hello world");
             }
