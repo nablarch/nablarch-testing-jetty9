@@ -623,7 +623,7 @@ public class HttpServerTest {
         HttpResponse res = server.handle(req, ctx);
 
         assertEquals(200, res.getStatusCode());
-        assertNull(res.getContentType());
+        assertNull(res.getHeader("Content-Type"));
         assertEquals("/app/test.html", req.getRequestPath());
 
         File[] dumpFiles = dumpRoot.listFiles();
@@ -659,7 +659,7 @@ public class HttpServerTest {
     @Test
     public void testHttpMessageDumpBodyEmptyFacilitiesForResponseWithNoBodyEnabledTrue() throws Exception {
         final WebConfig webConfig = new WebConfig();
-        webConfig.setContentTypeForResponseWithNoBodyEnabled(true);
+        webConfig.setAddDefaultContentTypeForNoBodyResponse(true);
         SystemRepository.load(new ObjectLoader() {
             @Override
             public Map<String, Object> load() {
@@ -700,7 +700,7 @@ public class HttpServerTest {
         HttpResponse res = server.handle(req, ctx);
 
         assertEquals(200, res.getStatusCode());
-        assertEquals("text/plain;charset=utf-8", res.getContentType());
+        assertEquals("text/plain;charset=utf-8", res.getHeader("Content-Type"));
         assertEquals("/app/test.html", req.getRequestPath());
 
         File[] dumpFiles = dumpRoot.listFiles();
