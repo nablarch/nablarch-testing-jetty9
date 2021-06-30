@@ -45,6 +45,10 @@
           <groupId>org.mortbay.jetty</groupId>
           <artifactId>jsp-api-2.1-glassfish</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>asm</groupId>
+          <artifactId>asm</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     
