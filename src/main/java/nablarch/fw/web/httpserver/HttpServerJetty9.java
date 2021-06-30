@@ -213,7 +213,7 @@ public class HttpServerJetty9 extends HttpServer {
     private ResourceCollection toResourceCollection(List<ResourceLocator> warBasePaths) {
         String[] realPaths = new String[warBasePaths.size()];
         for (int i = 0; i < warBasePaths.size(); i++) {
-            realPaths[i] = warBasePaths.get(i).getRealPath();
+            realPaths[i] = new File(warBasePaths.get(i).getRealPath()).getAbsolutePath();
         }
         try {
             return new ResourceCollection(realPaths);
