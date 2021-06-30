@@ -5,7 +5,7 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.EnumSet;
 
-import javax.servlet.DispatcherType;
+import jakarta.servlet.DispatcherType;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Filter;
 
 import nablarch.test.core.http.HttpRequestTestSupportHandler;
 import org.apache.tomcat.JarScanner;
